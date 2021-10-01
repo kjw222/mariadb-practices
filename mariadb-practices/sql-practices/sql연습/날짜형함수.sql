@@ -40,7 +40,7 @@ select first_name,
 from employees;
 
 #cast
-#select '12345' + 10, cast('12345' as int) + 10;
+#select '12345' + 10, cast('12345' as INT) + 10;
 select date_format(cast('2021-10-01' as date), '%Y-%m-%d');
 select cast(1-2 as unsigned);
 select cast(cast(1-2 as unsigned) as signed);
