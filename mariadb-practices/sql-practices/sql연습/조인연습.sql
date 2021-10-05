@@ -81,7 +81,6 @@ order by b.salary desc;
 select avg(b.salary), a.title, count(*)
 from titles a, salaries b
 where a.emp_no = b.emp_no
-
 and b.to_date = '9999-01-01'
 and a.to_date = '9999-01-01'
 group by a.title
@@ -89,22 +88,23 @@ having count(*) >= 100
 order by avg(salary) desc;
 
 -- 예제 6 : 현재 부서별로 현재 직책이 engineer 인 직원들에 대해 평균급여를 구하세요.
-select d.dept_name, avb(b.salary)
+select d.dept_name, avg(b.salary)
   from dept_emp a, salaries b, titles c, departments d
   where a.emp_no = b.emp_no
   and b.emp_no = c.emp_no
+  and a.dept_no = d.dept_no
   and a.to_date = '9999-01-01'
   and b.to_date = '9999-01-01'
   and c.to_date = '9999-01-01'
   and c.title = 'Engineer'
-  group by d.dept_no;
+  group by d.dept_name;
   
   
   -- 예제 7: 현재 직책별로 급여의 총합을 구하되 Engineer 직책은 제외하세요.
   -- 단, 총합이 2,000,000,000이상인 직책만 나타내며 급여총합에 대해서 내림차순(desc) 로 정렬하세요.
-  select sum(b.salary)
+  select a.title, sum(b.salary) as sum_salary
   from titles a, salaries b
-  where a.to_date = b.to_date
+  where a.emp_no = b.emp_no
 	and a.to_date = '9999-01-01'
 	and b.to_date = '9999-01-01'
     and a.title != 'Engineer'
