@@ -2,8 +2,9 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.douzone</groupId>
   <artifactId>mariadb-practices</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -22,10 +23,9 @@
 				</configuration>
 			</plugin>
 		</plugins>
-	</build>  
+	</build>
+	
 	<modules>
-  	
-  	
-  <module>sql-practices</module>
+		<module>jdbc-practices</module>
 	</modules>
 </project>
