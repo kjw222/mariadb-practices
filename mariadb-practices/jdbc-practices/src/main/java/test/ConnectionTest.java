@@ -11,7 +11,7 @@ public class ConnectionTest {
 			// 1. jdbc driver 로딩
 			Class.forName("org.mariadb.jdbc.Driver");
 			// 2. 연결하기
-			String url  = "jdbc:mysql://127.0.0.1:3307/webdb";
+			String url  = "jdbc:mysql://127.0.0.1:3307/webdb?charset=utf8";
 			conn = DriverManager.getConnection(url, "webdb", "webdb");
 			System.out.println("연결성공");
 		} catch (ClassNotFoundException e) {
