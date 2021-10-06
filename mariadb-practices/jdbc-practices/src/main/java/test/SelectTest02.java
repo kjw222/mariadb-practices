@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class SelectTest01 {
+public class SelectTest02 {
 
 	public static void main(String[] args) {
 		search("pat");
@@ -15,7 +15,7 @@ public class SelectTest01 {
 	}
 	public static void search(String keyword) {
 		Connection conn = null;
-		Statement stmt = null;
+		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
 			// 1. jdbc driver 로딩
@@ -25,14 +25,19 @@ public class SelectTest01 {
 			conn = DriverManager.getConnection(url, "hr", "hr");
 			System.out.println("연결성공");
 			
-			//3. sql 준비
-			stmt = conn.createStatement();
+			//3. statement 생성
 			
-			//4. SQL 준비
-			String sql = "select emp_no, first_name from employees where first_name like '%" + keyword + "%'";
 			
-			//sql 실행
-			rs = stmt.executeQuery(sql);
+			//4. SQL 실행
+			String sql = "select emp_no, first_name from employees where first_name like ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			//4. binding
+			pstmt.setString(1, "%" + keyword + "%");
+			
+			//5. SQL 실행
+			rs = pstmt.executeQuery();
+			
 			while(rs.next()) {
 				Long empNo = rs.getLong(1);
 				String firstName = rs.getString(2);
@@ -50,8 +55,8 @@ public class SelectTest01 {
 				if(rs != null) {
 					rs.close();
 					}
-				if(stmt != null) {
-				stmt.close();
+				if(pstmt != null) {
+				pstmt.close();
 				}
 				if(conn != null) {
 				conn.close();

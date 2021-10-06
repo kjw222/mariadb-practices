@@ -16,7 +16,7 @@ public class UpdateTest01 {
 			System.out.println("성공!");
 		}
 	}
-	private static boolean insert(String name) {
+	private static boolean update(DeptVo vo) {
 		boolean result = false;
 		Connection conn = null;
 		Statement stmt = null;
@@ -32,7 +32,9 @@ public class UpdateTest01 {
 			stmt = conn.createStatement();
 			
 			//4. SQL 실행
-			String sql = "insert into dept values(null, '"+name+"')";
+			String sql = "update dept" + 
+				    "   set name='" + vo.getName() + "'" +
+				    " where no=" + vo.getNo();
 			int count = stmt.executeUpdate(sql);
 			
 			result = count ==1;

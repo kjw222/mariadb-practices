@@ -3,20 +3,22 @@ package test;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class SelectTest01 {
+public class InsertTest02 {
 
 	public static void main(String[] args) {
-		search("pat");
-		
+		insert("영업");
+		insert("개발");
+		insert("기획");
+
 	}
-	public static void search(String keyword) {
+
+	private static boolean insert(String name) {
+		boolean result = false;
 		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
+		PreparedStatement pstmt = null;
 		try {
 			// 1. jdbc driver 로딩
 			Class.forName("org.mariadb.jdbc.Driver");
@@ -25,20 +27,21 @@ public class SelectTest01 {
 			conn = DriverManager.getConnection(url, "hr", "hr");
 			System.out.println("연결성공");
 			
-			//3. sql 준비
-			stmt = conn.createStatement();
 			
-			//4. SQL 준비
-			String sql = "select emp_no, first_name from employees where first_name like '%" + keyword + "%'";
 			
-			//sql 실행
-			rs = stmt.executeQuery(sql);
-			while(rs.next()) {
-				Long empNo = rs.getLong(1);
-				String firstName = rs.getString(2);
-				System.out.println(empNo+ " : "+firstName);
-			}
+			//3. SQL 준비
+			String sql = "insert into dept values(null, ?)";
+			pstmt = conn.prepareStatement(sql);
 			
+			
+			//바인딩(binding)
+			pstmt.setString(1, name);
+			
+			//4. SQL 실행
+			
+			int count = pstmt.executeUpdate(sql);
+			
+			result = count ==1;
 			
 		} catch (ClassNotFoundException e) {
 			System.out.println("드라이버 로딩 실패:"+ e);
@@ -47,11 +50,8 @@ public class SelectTest01 {
 		}finally {
 			//clean up
 			try {
-				if(rs != null) {
-					rs.close();
-					}
-				if(stmt != null) {
-				stmt.close();
+				if(pstmt != null) {
+				pstmt.close();
 				}
 				if(conn != null) {
 				conn.close();
@@ -61,9 +61,7 @@ public class SelectTest01 {
 				
 			}
 		}
-	
-	
-
+		return result;
 	}
 
 }

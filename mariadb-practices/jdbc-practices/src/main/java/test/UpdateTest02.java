@@ -3,20 +3,24 @@ package test;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
-public class SelectTest01 {
 
+public class UpdateTest02 {
 	public static void main(String[] args) {
-		search("pat");
+		DeptVo vo = new DeptVo();
+		vo.setName("전략기획팀");
+		vo.setNo(12L);
 		
+		Boolean result = update(vo);
+		if(result) {
+			System.out.println("성공!");
+		}
 	}
-	public static void search(String keyword) {
+	private static boolean update(DeptVo vo) {
+		boolean result = false;
 		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
+		PreparedStatement pstmt = null;
 		try {
 			// 1. jdbc driver 로딩
 			Class.forName("org.mariadb.jdbc.Driver");
@@ -26,19 +30,16 @@ public class SelectTest01 {
 			System.out.println("연결성공");
 			
 			//3. sql 준비
-			stmt = conn.createStatement();
+			String sql = "update dept set name=? where no=?";
+			pstmt = conn.prepareStatement(sql);
+			//4. binding
+			pstmt.setString(1, vo.getName());
+			pstmt.setLong(2, vo.getNo());
 			
-			//4. SQL 준비
-			String sql = "select emp_no, first_name from employees where first_name like '%" + keyword + "%'";
+			//5. SQL 실행
+			int count = pstmt.executeUpdate();
 			
-			//sql 실행
-			rs = stmt.executeQuery(sql);
-			while(rs.next()) {
-				Long empNo = rs.getLong(1);
-				String firstName = rs.getString(2);
-				System.out.println(empNo+ " : "+firstName);
-			}
-			
+			result = count ==1;
 			
 		} catch (ClassNotFoundException e) {
 			System.out.println("드라이버 로딩 실패:"+ e);
@@ -47,11 +48,8 @@ public class SelectTest01 {
 		}finally {
 			//clean up
 			try {
-				if(rs != null) {
-					rs.close();
-					}
-				if(stmt != null) {
-				stmt.close();
+				if(pstmt != null) {
+				pstmt.close();
 				}
 				if(conn != null) {
 				conn.close();
@@ -61,9 +59,7 @@ public class SelectTest01 {
 				
 			}
 		}
-	
-	
-
+		return result;
 	}
 
 }

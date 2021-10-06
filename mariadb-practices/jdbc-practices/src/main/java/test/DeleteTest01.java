@@ -12,7 +12,7 @@ public class DeleteTest01 {
 		System.out.println(result ?"성공":"실패");
 
 	}
-	private static boolean insert(String name) {
+	private static boolean delete(long no) {
 		boolean result = false;
 		Connection conn = null;
 		Statement stmt = null;
