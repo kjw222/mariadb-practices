@@ -16,7 +16,7 @@ public class BookShop {
 		Long no = scanner.nextLong();
 		scanner.close();
 		
-		new BookDao().update(no, "대여중";)
+		new BookDao().update(no, "대여중");
 		
 		displayBookInfo();
 	}

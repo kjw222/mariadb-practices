@@ -7,11 +7,11 @@ public class EmployeeVo {
 	private String lastName;
 	private String gender;
 	private String hireDate;
-	private int slary;
+	private int salary;
 	@Override
 	public String toString() {
 		return "EmployeeVo [no=" + no + ", birthDate=" + birthDate + ", firstName=" + firstName + ", lastName="
-				+ lastName + ", gender=" + gender + ", hireDate=" + hireDate + ", slary=" + slary + "]";
+				+ lastName + ", gender=" + gender + ", hireDate=" + hireDate + ", salary=" + salary + "]";
 	}
 	public Long getNo() {
 		return no;
@@ -49,15 +49,12 @@ public class EmployeeVo {
 	public void setHireDate(String hireDate) {
 		this.hireDate = hireDate;
 	}
-	public int getSlary() {
-		return slary;
+	public int getSalary() {
+		return salary;
 	}
-	public void setSalary(int slary) {
-		this.slary = slary;
+	public void setSalary(int salary) {
+		this.salary = salary;
 	}
-	public Long getSalary() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 }

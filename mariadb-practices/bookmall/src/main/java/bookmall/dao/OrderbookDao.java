@@ -1,21 +1,18 @@
-package bookshop.dao;
+package bookmall.dao;
 
-	import java.sql.Connection;
-	import java.sql.DriverManager;
-	import java.sql.PreparedStatement;
-	import java.sql.ResultSet;
-	import java.sql.SQLException;
-	import java.sql.Statement;
-	import java.util.ArrayList;
-	import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-import bookshop.vo.AuthorVo;
+import bookmall.vo.OrderbookVo;
 
-import bookshop.vo.AuthorVo;
-
-public class AuthorDao {
-	public List<AuthorVo> findAll() {
-		List<AuthorVo> result = new ArrayList<>();
+public class OrderbookDao {
+	public List<OrderbookVo> select() {
+		List<OrderbookVo> list = new ArrayList<>();
 		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -25,7 +22,7 @@ public class AuthorDao {
 			conn = getConnection();
 			
 			//3. SQL 준비
-			String sql = "select no, name from author";
+			String sql = "select book_no, order_no, amount from order_book";
 			pstmt = conn.prepareStatement(sql);
 			
 			//4. 바인딩(binding)
@@ -34,13 +31,16 @@ public class AuthorDao {
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				Long no = rs.getLong(1);
-				String name = rs.getString(2);
+				Long orderNo = rs.getLong(2);
+				Long amount = rs.getLong(3);				
 				
-				AuthorVo vo = new AuthorVo();
-				vo.setNo(no);
-				vo.setName(name);
+				OrderbookVo vo = new OrderbookVo();
 				
-				result.add(vo);
+				vo.setBookNo(no);
+				vo.setOrderNo(orderNo);
+				vo.setAmount(amount);
+				
+				list.add(vo);
 			}
 		} catch (SQLException e) {
 			System.out.println("error:" + e);
@@ -61,10 +61,10 @@ public class AuthorDao {
 			}
 		}		
 		
-		return result;
+		return list;
 	}
 	
-	public boolean insert(AuthorVo vo) {
+	public boolean insert(OrderbookVo vo) {
 		boolean result = false;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -73,11 +73,13 @@ public class AuthorDao {
 			conn = getConnection();
 			
 			//3. SQL 준비
-			String sql = "insert into author values(null, ?)";
+			String sql = "insert into order_book values(?, ? ,?)";
 			pstmt = conn.prepareStatement(sql);
 			
 			//4. 바인딩(binding)
-			pstmt.setString(1, vo.getName());
+			pstmt.setLong(1, vo.getBookNo());
+			pstmt.setLong(2, vo.getOrderNo());
+			pstmt.setLong(3, vo.getAmount());
 			
 			//5. SQL 실행
 			int count = pstmt.executeUpdate();
@@ -102,19 +104,20 @@ public class AuthorDao {
 		return result;
 	}
 	
-	private Connection getConnection() throws SQLException {
+	private static Connection getConnection() throws SQLException {
 		Connection conn = null;
 		try {
 			// 1. JDBC Driver 로딩
 			Class.forName("org.mariadb.jdbc.Driver");
 
 			// 2. 연결하기
-			String url = "jdbc:mysql://127.0.0.1:3307/webdb?charset=utf8";
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
+			String url = "jdbc:mysql://127.0.0.1:3307/bookmall?charset=utf8";
+			conn = DriverManager.getConnection(url, "bookmall", "bookmall");
 		} catch (ClassNotFoundException e) {
 			System.out.println("드라이버 로딩 실패:" + e);
 		}
 
 		return conn;
 	}
+
 }
